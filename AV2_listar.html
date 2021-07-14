@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+		<title>CRUD PHP</title>
+		<script>
+			function mostrainfo()
+			{
+					let xmlhttp = new XMLHttpRequest(); //inicia o objeto
+					xmlhttp.onreadystatechange = function()//roda a funcao
+					{
+						if(this.readyState == 4 && this.status == 200)
+						{
+							console.log("retorno: " +  this.responseText);
+							document.getElementById("listar").value = this.responseText;
+							document.getElementById("listar").innerHTML = this.responseText;
+						}
+						console.log("ReadyState: " + this.readyState);
+					}
+					xmlhttp.open("GET", "http://localhost/3daw/AV2_listar.php", true);
+					xmlhttp.send();
+					console.log("Mostrainfo1 ok");
+			}
+		</script>
+	</head>
+	<nav>
+		<span style="padding-right: 10px"><a href="AV2_listar.html">Listar Todos Produtos</a></span>
+		<span style="padding-right: 10px"><a href="AV2_listarUM.html">Listar UM Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_incluir.html">Incluir Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_update.html">Alterar Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_delete.html">Excluir Produto</a></span>
+	</nav><br>
+	<body onload="mostrainfo()">
+		<br><span id="listar"></span>
+		</table>
+	</body>
+<html>

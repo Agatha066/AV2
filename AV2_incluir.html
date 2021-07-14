@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+	<meta charset="UTF-8">
+	<title>Formulario Cadastro de Produto</title>
+	<style>
+		.bd{
+		  border-radius: 5px;
+		  background-color: #f2f2f2;
+		  padding: 20px;
+		}
+		.cd{
+		  background-color: yellow;
+		  height: 5%;
+		  width: 10%;
+		}
+		input[type=button] {
+		  width: 100%;
+		  background-color: #4CAF50;
+		  color: white;
+		  padding: 14px 20px;
+		  margin: 8px 0;
+		  border: none;
+		  border-radius: 4px;
+		  cursor: pointer;
+		}
+
+		input[type=button]:hover {
+		  background-color: #45a049;
+		}
+	</style>
+	<script>
+			var controls = {
+						upload: function( file ) {
+							var xhr = new XMLHttpRequest();
+							var fd = new FormData();
+							var nome = document.getElementById("nome").value;
+							var id = document.getElementById("id").value;
+							var fabricante = document.getElementById("fabricante").value;
+							var categoria = document.getElementById("categoria").value;
+							var tipo = document.getElementById("tipo").value;
+							var preco = document.getElementById("preco").value;
+							var quant = document.getElementById("qnt").value;
+							var descricao = document.getElementById("descricao").value;
+							var peso = document.getElementById("peso").value;
+							var data = document.getElementById("data").value;
+							var cod = document.getElementById("codigo").value;
+							
+							// formulário
+							fd.append( "files", file );
+							fd.append( "nome", nome );
+							fd.append( "id", id );
+							fd.append( "fabricante", fabricante );
+							fd.append( "tipo", tipo );
+							fd.append( "categoria",categoria );
+							fd.append( "preco", preco );
+							fd.append( "peso", peso );
+							fd.append( "data", data );
+							fd.append( "codigo", cod );
+							fd.append( "quant", quant );
+							fd.append( "descricao", descricao );
+							
+							// abre requisição
+							xhr.open( 'POST', 'AV2_incluir.php'); //AV2_incluir.php
+							
+							// quando o upload estiver completo
+							xhr.upload.addEventListener( "load", function () { 
+								console.log('upload complete!'); 
+							}, false );
+							
+							// progresso
+							xhr.upload.addEventListener("progress", function(evt){
+							if ( evt.lengthComputable) {
+								console.log (( evt.loaded/evt.total) * 100 );
+							}
+							else
+							{
+								console.log ( "Error uploading." );
+							}	
+						},false);
+							
+							// envia o formulário
+							xhr.send( fd );
+
+							// quando estiver pronto
+							xhr.onreadystatechange = function () {
+								if ( this.readyState == 4 ) {
+									console.log ( "Status: " + this.status );
+									console.log ( "readyState: " + this.readyState );
+									console.log ( "responseText: (" + this.responseText + " )");
+								}
+							};
+
+						
+						},
+						
+						init: function () {
+							var form = document.getElementById ( "cadastro" ); //cadastro
+							var buttonEnviar = document.getElementById( "send" );
+
+						// não deixa o formulário HTML enviar o arquivo
+						form.addEventListener ( "submit", function(evt){
+							// se não adiconar essa linha, o formulário envia o arquivo, não o XHR
+							evt.preventDefault();
+						}, false );
+
+							buttonEnviar.addEventListener ( "click", controls.handleFiles, false );
+						},
+						
+						// chamada quando o usuário clica no botão enviar
+						handleFiles: function() {
+							var inputFile = document.getElementById("img");
+							
+							controls.upload ( inputFile.files[0] );
+						}
+						
+					};
+				window.addEventListener ( "load", controls.init, false );
+				
+			function mostrainfo1()
+			{
+					let xmlhttp = new XMLHttpRequest(); //inicia o objeto
+					xmlhttp.onreadystatechange = function()//roda a funcao
+					{
+						if(this.readyState == 4 && this.status == 200)
+						{
+							console.log("Retorno: " + this.responseText);
+							let obj = JSON.parse(this.responseText);
+							let cat = document.getElementById("categoria");
+							for(i=0; i < obj.length; i++)
+							{
+								let categ = new Option(obj[i],obj[i]);
+								cat.options.add(categ);
+							}
+						}
+					}
+					xmlhttp.open("GET", "http://localhost/3daw/categoria.php", true);
+					xmlhttp.send();
+					console.log("Mostrainfo1 ok");
+			}
+			
+		function mostrainfo(str)//string UF
+			{
+				console.log(str);
+				console.log("str: " + str);
+				if (str.length > 0)//verifica se ta vazio
+				{
+					let xmlhttp = new XMLHttpRequest(); //inicia o objeto
+					xmlhttp.onreadystatechange = function()//roda a funcao
+					{
+						if(this.readyState == 4 && this.status == 200)
+						{
+							console.log("Retorno: " + this.responseText);
+							let obj = JSON.parse(this.responseText);
+							document.getElementById("tipo").value = this.responseText;
+							let cat = document.getElementById("tipo");
+							for(i=0; i < obj.length; i++)
+							{
+								let cgt = new Option(obj[i],obj[i]);
+								cat.options.add(cgt);
+							}
+						}
+					}
+					xmlhttp.open("GET", "http://localhost/3daw/tipo.php?categoria="+ str, true);
+					xmlhttp.send();
+					console.log("Requisicao enviada");
+				}
+			}
+			  function gerar()
+			  {
+				document.getElementById('codigo').innerText = Math.floor(100000000* Math.random() + 10000000);
+			  }
+			  function previewFile() {
+			  var preview = document.querySelector('img');
+			  var file    = document.querySelector('input[type=file]').files[0];
+			  var reader  = new FileReader();
+
+			  reader.onloadend = function () {
+				preview.src = reader.result;
+			  }
+
+			  if (file) {
+				reader.readAsDataURL(file);
+			  } else {
+				preview.src = "";
+			  }
+			}
+			function ValidaNome(pNome)
+			{
+				if(pNome == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaID(pId)
+			{
+				if(pId == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaFabricante(pFabricante)
+			{
+				if(pFabricante == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaData(pData)
+			{
+				var date = new Date(pData.split('/').reverse().join('/'));
+				var novaData = new Date();
+				if(date > novaData){
+					return false;
+				}
+				return true;
+			}
+			function ValidaPreco(pPreco){
+				if(pPreco == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaPeso(pPeso){
+				if(pPeso == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaQnt(pQunt){
+				if(pQunt == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaCod(pCod){
+				if(pCod == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaDescricao(pDescr){
+				if(pDescr == ""){
+					return false;
+				}
+				return true;
+			}
+			function ValidaImagem(pImg){
+				if(pImg.fileSize == 0 )
+				{
+					return false;
+				}
+				return true;
+			}
+			function ValidaForm()
+			{
+				let obj2Form = document.getElementById("cadastro");
+				//console.log("objFom2: " + document.getElementById("cadastro").innerText);
+				
+				let id = document.getElementById("id").value;
+				let nome = document.getElementById("nome").value;
+				let fabricante = document.getElementById("fabricante").value;
+				let categoria = document.getElementById("categoria").value;
+				let tipo = document.getElementById("tipo").value;
+				let preco = document.getElementById("preco").value;
+				let quant = document.getElementById("qnt").value;
+				let descricao = document.getElementById("descricao").value;
+				let peso = document.getElementById("peso").value;
+				let data = document.getElementById("data").value;
+				let cod = document.getElementById("codigo").value;
+				let img = document.getElementById("img").files[0].name;
+				
+				let erro = 0;
+				
+				if(!ValidaNome(nome)){
+					document.getElementById("msg").innerText = "Nome nao pode ser vazio!!";
+					erro = 1;
+				}
+				if(!ValidaID(id)){
+					document.getElementById("msg").innerText = "ID nao pode ser vazio!!";
+					erro = 1;
+				}
+				if(!ValidaFabricante(fabricante)){
+					document.getElementById("msg").innerText = "Fabricante invalido!!";
+					erro = 1;
+				}
+				if(!ValidaData(data)){
+					document.getElementById("msg").innerText = "Data invalido!!";
+					erro = 1;
+				}
+				if(!ValidaPreco(preco)){
+					document.getElementById("msg").innerText = "Preco nao pode ser Vazio!!";
+					erro = 1;
+				}
+				if(!ValidaQnt(quant)){
+					document.getElementById("msg").innerText = "Quantidade invalida!!";
+					erro = 1;
+				}
+				if(!ValidaCod(cod)){
+					document.getElementById("msg").innerText = "Codigo de Barra invalido!!";
+					erro = 1;
+				}
+				if(!ValidaPeso(peso)){
+					document.getElementById("msg").innerText = "Peso em Gramas invalido!!";
+					erro = 1;
+				}
+				if(!ValidaDescricao(descricao)){
+					document.getElementById("msg").innerText = "Descricao invalida!!";
+					erro = 1;
+				}
+				if(!ValidaImagem(img)){
+					document.getElementById("msg").innerText = "Imagem invalida!!";
+					erro = 1;
+				}
+				
+				if(erro==1)
+				{
+					document.getElementById("msgErro").innerText = "Dados Preenchidos Incorretos!!";
+				}
+				else{
+					document.getElementById("msgErro").innerText = "Dados Preenchidos Perfeitamente!!";
+				}
+			}
+	</script>
+	</head>
+	<body onload = "mostrainfo1()"><br>
+
+	<nav>
+			<span style="padding-right: 10px"><a href="AV2_listar.html">Listar Todos Produtos</a></span>
+			<span style="padding-right: 10px"><a href="AV2_listarUM.html">Listar UM Produto</a></span>
+			<span style="padding-right: 10px"><a href="AV2_incluir.html">Incluir Produto</a></span>
+			<span style="padding-right: 10px"><a href="AV2_update.html">Alterar Produto</a></span>
+			<span style="padding-right: 10px"><a href="AV2_delete.html">Excluir Produto</a></span>
+		</nav><br>
+
+	<div class="bd">
+	 
+	<h3>Cadastro de Produto</h3>
+	<form action="" id="cadastro" enctype="multipart/form-data">
+
+	  Nome: <input type="text" id="nome" placeholder="Seu nome..">
+	  <br><br>
+	  id: <input type="text" id="id" placeholder="ID Produto..">
+	  <br><br>
+	  Fabricante: <input type="text" id="fabricante" placeholder="Nome Fab..">
+	  <br><br>
+	  Categoria: <select id="categoria" onchange="mostrainfo(this.value)"><option value="">Categoria</option></select>
+	  <br><br>
+	  Tipo de Produto: <select id="tipo"><option value="">Tipo de Produto</option></select>
+	  <br><br>
+	  Preco de venda: <input type="text" id="preco" placeholder="Dinheiro..">
+	  <br><br>
+	  Qnt em Estoque: <input type="number" id="qnt" placeholder="Quantidade..">
+	  <br><br>
+	  Peso em Gramas: <input type="text" id="peso" placeholder="Peso..">
+	  <br><br>
+	  Descricao: <input type="text" id="descricao" placeholder="Este produto..">
+	  <br><br>
+	  Data de Inclucao: <input type="date" id="data"/>
+	  <br><br>
+	   Codigo de barra:<input type="text" id="codigo"><br>
+	  <br>
+	  Imagem do Produto:<input type="file" id="img" name="img" onchange="previewFile()"><br>
+	  <img src="" height="200" alt="Prévia da imagem...">
+	  <br><br>
+	  <input type="button" id="send" value="Criar Novo Produto" onclick="ValidaForm()">
+	  <br><br>
+	  <p id="msgErro"></p>
+	  <br><p id="msg"></p>
+	</form></div><br>
+
+	</body>
+</html>

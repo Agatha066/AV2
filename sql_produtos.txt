@@ -1,0 +1,86 @@
+CREATE DATABASE 3daw_AV2;
+
+CREATE TABLE PRODUTO (
+  ID           BIGINT        NOT NULL AUTO_INCREMENT,
+  ID_PROD      INT(11)        NOT NULL,
+  NOME         VARCHAR(100)  NOT NULL,
+  CATEGORIA	   VARCHAR(100)  NOT NULL,
+  TIPO		   VARCHAR(100)  NOT NULL,
+  FABRICANTE   VARCHAR(100)  NOT NULL,
+  COD_BARRA	   VARCHAR(1000)       NOT NULL,
+  IMG          longblob      NOT NULL,
+  DESCRICAO    VARCHAR(1000) NULL,
+  PRECO        DECIMAL(9,2)  NOT NULL,
+  PESO         DECIMAL(4,3)  NOT NULL,
+  QUANT_EST    INT(11)           NOT NULL DEFAULT 0,
+  DISPONIVEL   BOOLEAN          NOT NULL DEFAULT TRUE,       
+  DATA_CADASTRO  TIMESTAMP     NOT NULL,
+  CONSTRAINT PK_PRODUTO PRIMARY KEY (ID)
+);
+
+CREATE TABLE CATEGORIA (
+  ID   INT          NOT NULL AUTO_INCREMENT,
+  NOME VARCHAR(100) NOT NULL,
+  CONSTRAINT PK_CATEGORIA PRIMARY KEY (ID),
+  CONSTRAINT UC_NOME UNIQUE (NOME)
+);
+
+CREATE TABLE TIPO (
+    ID   BIGINT NOT NULL,
+    ID_CATEGORIA INT    NOT NULL,
+	NOME    VARCHAR(100)  NOT NULL,
+    CONSTRAINT FK_CATEGORIA FOREIGN KEY (ID_CATEGORIA) REFERENCES CATEGORIA(ID)
+);
+
+-- TABLE TIPO DE PRODUTO;
+
+INSERT INTO CATEGORIA (ID, NOME) VALUES
+(1, 'Carros, pecas e Acessorios'),
+(2, 'Casa e Escritorio'),
+(3, 'Alimentos e Bebidas'),
+(4, 'Diversao, Lazer, Entretenimento'),
+(5, 'Informatica e Servicos Graficos'),
+
+
+INSERT INTO TIPO (ID, ID_CATEGORIA, NOME) VALUES
+(1, 1, 'Aluguel de automoveis'),
+(2, 1, 'Pneus'),
+(3, 1, 'Carretas'),
+(4, 1, 'Consorcios'),
+(5, 1, 'Engates'),
+(6, 1, 'Vidro de Seguranca'),
+(7, 1, 'Embreagens'),
+(8, 1, 'Filtro de Ar'),
+(9, 1, 'Martelinho de Ouro'),
+(10, 2, 'Assessoria do Lar'),
+(11, 2, 'Avaliadores'),
+(12, 2, 'Corretor de Imoveis'),
+(13, 2, 'Imobiliarias'),
+(14, 2, 'Conserto de Fogoes'),
+(15, 2, 'Almofadas'),
+(16, 2, 'Piscinas'),
+(17, 2, 'Grama'),
+(18, 3, 'Acougues'),
+(19, 3, 'Castanhas'),
+(20, 3, 'Cereais'),
+(21, 3, 'Frutos do Mar'),
+(22, 3, 'Laticinios'),
+(23, 3, 'Mel'),
+(24, 3, 'Bares e Cafe'),
+(25, 3, 'Cyber Cafe'),
+(26, 4, 'Agencias de Casamento'),
+(27, 4, 'Artigos de Carnaval'),
+(28, 4, 'Cinemas'),
+(29, 4, 'Games'),
+(30, 4, 'Boliche'),
+(31, 4, 'Museus'),
+(32, 4, 'Teatros'),
+(33, 4, 'Musicos'),
+(34, 5, 'Impressoras'),
+(35, 5, 'Notebooks'),
+(36, 5, 'Projetores'),
+(37, 5, 'VOIP'),
+(38, 5, 'Acabamentos Graficos'),
+(39, 5, 'Artigos de Carnaval'),
+(40, 5, 'Impressao Digital');
+

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+		<title>Detalhe do Produto</title>
+		<style>
+			.card {
+			  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			  max-width: 400px;
+			  margin: auto;
+			  text-align: center;
+			  font-family: arial;
+			}
+			
+		</style>
+		<script>
+			window.onload = CapturaParametrosUrl();
+			//window.onload= mostrainfo();
+    
+			function CapturaParametrosUrl() {
+				
+				//captura a url da página
+				var url = window.location.href; 
+				//tenta localizar o ?
+				var res = url.split('?');
+				
+				if (res[1] !== undefined) {
+					//tenta localizar os & (pode haver mais de 1)
+					var parametros = res[1].split('&');
+			 
+					
+					//qtd. de parâmetros que serão tratados pelo laço.
+					var qtdParametrosParaLer = 2; 
+					
+					//guarda o nome dos parâmetros e os valores e, vetores.
+					var parametroEncontrado = new Array(); 
+					var valorParametro = new Array();
+					var cont = 0;
+					var quant = 0;
+					
+					for (var cont = 0; cont<=qtdParametrosParaLer; cont++)
+					{
+						if (parametros[cont] !== undefined) 
+						{
+							var quant=1
+							captura = parametros[cont].split('=');				
+							
+							parametroEncontrado[cont] = captura[0];
+							valorParametro[cont] = captura[1];
+							if(quant == 1)
+							{
+								mostrainfo(valorParametro[cont]);
+								quant++;
+							}
+						}
+					}
+				}
+			}
+			function mostrainfo(cod)
+			{
+			
+					let xmlhttp = new XMLHttpRequest(); //inicia o objeto
+					xmlhttp.onreadystatechange = function()//roda a funcao
+					{
+						if(this.readyState == 4 && this.status == 200)
+						{
+							console.log("Retorno: " + this.responseText);
+							document.getElementById("listar").value = this.responseText;
+							document.getElementById("listar").innerHTML = this.responseText;
+						}
+					}
+					xmlhttp.open("GET", "http://localhost/3daw/detalheProd.php?codigo="+cod, true);
+					xmlhttp.send();
+					console.log("Mostrainfo ok");
+			}
+		</script>
+	</head>
+	<nav>
+		<span style="padding-right: 10px"><a href="AV2_listar.html">Listar Todos Produtos</a></span>
+		<span style="padding-right: 10px"><a href="AV2_listarUM.html">Listar UM Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_incluir.html">Incluir Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_update.html">Alterar Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_delete.html">Excluir Produto</a></span>
+	</nav><br>
+	<body>
+		
+		<h2 style="text-align:center">PRODUTO</h2>
+		<p style="text-align:center">Aqui voce fica por dentro de tudo</p>
+		
+		<div class="card">
+		  <span id="listar"></span>
+		</div>
+		
+	</body>
+<html>

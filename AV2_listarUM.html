@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt">
+	<head>
+		<meta charset="utf-8">
+		<title>CRUD PHP</title>
+		<script>
+			function mostrainfo(cod)//string UF
+			{
+				if (cod.length > 0)//verifica se ta vazio
+				{
+					let xmlhttp = new XMLHttpRequest(); //inicia o objeto
+					xmlhttp.onreadystatechange = function()//roda a funcao
+					{
+						if(this.readyState == 4 && this.status == 200)
+						{
+							console.log("retorno: " +  this.responseText);
+							document.getElementById("listar").value = this.responseText;
+							document.getElementById("listar").innerHTML = this.responseText;
+						}
+						console.log("ReadyState: " + this.readyState);
+					}
+					xmlhttp.open("GET", "http://localhost/3daw/AV2_listarUM.php?codigo="+cod , true);
+					xmlhttp.send();
+					console.log("Requisicao enviada");
+				}
+			}
+			function ValidaForm()
+			{
+				let obj2Form = document.getElementById("cadastro");
+
+				let cod = document.getElementById("codigo").value;
+				
+				let erro = 1;
+				erro = ValidaCod(cod);
+				
+				if(erro==1)
+				{
+					document.getElementById("msgErro").innerText = "COD_BARRA Invalido!!";
+				}
+				else{
+					document.getElementById("msgErro").innerText = "COD_BARRA Valido!!";
+					mostrainfo(cod);
+				}
+			}
+			function ValidaCod(pCod){
+				var err= 1;
+				if(pCod == ""){
+					return err;
+				}
+				else{
+					err=0;
+					return err;
+				}
+			}
+			
+		</script>
+	</head>
+	<nav>
+		<span style="padding-right: 10px"><a href="AV2_listar.html">Listar Todos Produtos</a></span>
+		<span style="padding-right: 10px"><a href="AV2_listarUM.html">Listar UM Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_incluir.html">Incluir Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_update.html">Alterar Produto</a></span>
+		<span style="padding-right: 10px"><a href="AV2_delete.html">Excluir Produto</a></span>
+	</nav><br>
+	<body>
+		<form>
+			<h2>Mostrar 1 Produto Atraves do COD_BARRA </h2>
+			CODODIGO DE BARRA: <input type="text" id="codigo"><br><br>
+			<input type="button" value="Mostrar Produto" onclick="ValidaForm()">
+			<br><br><div id="msgErro"></div>
+		</form>
+		<br><span id="listar"></span>
+	</body>
+<html>
